@@ -1,0 +1,10 @@
+{% extends 'CyberUser/base.html' %}
+{% block content %}
+<form method="POST" action="">
+    {% csrf_token %}
+    {% for frm in form%}
+        {{ frm }}
+    {% endfor %}
+    <input type="submit" name="Submit">
+</form>
+{% endblock %}
