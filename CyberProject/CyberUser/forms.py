@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Comment, Bet, Match
 
 
 class SignupForm(UserCreationForm):
@@ -17,3 +17,21 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = '__all__'
         exclude = ['user',]
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class BetForm(forms.ModelForm):
+    class Meta:
+        model = Bet
+        fields = '__all__'
+
+class UpdateMatch(forms.ModelForm):
+
+    class Meta:
+        model = Match
+        fields = ['match_status',]

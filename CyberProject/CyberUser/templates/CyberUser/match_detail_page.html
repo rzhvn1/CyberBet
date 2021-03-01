@@ -1,0 +1,24 @@
+{% extends 'CyberUser/base.html' %}
+{% block content %}
+<div class="post">
+    <div class="">
+
+        <h2><a href="">{{ matchs.title }}</a></h2>
+        <p>{{ match.match_status|linebreaksbr  }}</p>
+        {% for bet in bets %}
+        {{ bet.user }}
+        {{ bet.match }}
+        {{ bet.match_result }}
+        {{ bet.money }}
+        {% endfor %}
+        <h2><a href="{% url 'update-match-page' match.id %}">Update Match</a></h2>
+        {{ wallet }}
+        <h2>{{ matchs.match_result }}</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" name="submit">
+        </form>
+    </div>
+</div>
+{% endblock %}

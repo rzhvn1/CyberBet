@@ -1,0 +1,24 @@
+{% extends 'CyberUser/base.html' %}
+{% block content %}
+<div class="post">
+    <div class="">
+        <p>{{ news.published_date }}</p>
+        <h2><a href="">{{ news.title }}</a></h2>
+        <p>{{ news.description|linebreaksbr  }}</p>
+        <p>{{ likes }}</p>
+        <a href="{% url 'like' news.id %}">Like</a>
+        <p>{{ dislikes }}</p>
+        <a href="{% url 'dislike' news.id %}">Dislike</a>
+        {% for comment in comments %}
+        {{ comment.user }}
+        {{ comment.text }}
+        {{ comment.created }}
+        {% endfor %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" name="submit">
+        </form>
+    </div>
+</div>
+{% endblock %}

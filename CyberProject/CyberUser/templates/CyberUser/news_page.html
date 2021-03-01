@@ -1,0 +1,11 @@
+{% extends 'CyberUser/base.html' %}
+{% block content %}
+    {% for new in news %}
+    <div class="post"
+        <div class="">
+            <p>{{ new.published_date }}</p>
+            <h2><a href="{% url 'news-detail-page' new.id %}">{{ new.title }}</a></h2>
+            <p>{{ new.description|linebreaksbr  }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

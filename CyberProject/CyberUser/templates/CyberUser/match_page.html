@@ -1,0 +1,12 @@
+{% extends 'CyberUser/base.html' %}
+{% block content %}
+    {% for match in matchs1 %}
+        <h2><a href="{% url 'match-detail-page' match.id %}">{{ match.tital }}</a></h2>
+    {% endfor %}
+    {% for match in match2 %}
+        <h2>{{ match.tital }} {{ match.match_result }}</h2>
+    {% endfor %}
+    {% for match in match3 %}
+        <h2>{{ match.tital }} {{ match.match_result }}<h2>
+    {% endfor %}
+{% endblock %}
