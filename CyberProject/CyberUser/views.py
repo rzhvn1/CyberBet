@@ -1,4 +1,4 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
@@ -12,9 +12,7 @@ from .forms import SignupForm
 from .tokens import account_activation_token
 from CyberProject.settings import EMAIL_HOST_USER
 from .forms import *
-from .models import News, Like, Dislike, Match, TeamA, TeamB, Bet
-
-
+from .models import News, Like, Dislike, Match, AboutUs
 
 
 #********************CyberMain********************
@@ -50,6 +48,11 @@ def dislike(request, news_id):
         return HttpResponse('You already disliked this')
     else:
         return redirect('news-page')
+
+def about_us_page(request):
+    about_us = AboutUs.objects.all()
+    context = {'about_us':about_us}
+    return render(request, 'CyberUser/aboutus_page.html', context)
 
 
 #********************CyberUser********************
@@ -105,6 +108,10 @@ def login_page(request):
 
     return render(request, 'CyberUser/login_page.html')
 
+def logout_page(request):
+    logout(request)
+    return redirect('/')
+
 def profile_page(request):
     user = request.user.profile
     form = ProfileForm(instance=user)
@@ -114,6 +121,8 @@ def profile_page(request):
             form.save()
     context = {'form':form, 'user':user}
     return render(request, 'CyberUser/profile_page.html', context)
+
+#********************CyberBet********************
 
 def match_page(request):
     matchs1 = Match.objects.filter(match_status='Starting soon')
@@ -141,33 +150,42 @@ def update_match_page(request, match_id):
         match = Match.objects.get(id = match_id)
         form = UpdateMatch(instance=match)
         bets = match.bet_set.all()
+        print(bets)
         betsA = match.bet_set.filter(match_res='TeamA Win').count()
         betsB = match.bet_set.filter(match_res='TeamB Win').count()
-        rateA = 0
-        rateB = 0
         if betsA > betsB:
-            rateA = betsB // betsA
-            rateB = betsA // betsB
+            print('if')
+            rateA = betsB / betsA
+            rateB = betsA / betsB
         elif betsA < betsB:
-            rateA = betsA // betsB
-            rateB = betsB // betsA
+            print('elif')
+            rateA = betsB / betsA
+            rateB = betsA / betsB
         if request.method == 'POST':
             form = UpdateMatch(request.POST, instance=match)
             if form.is_valid():
                 form.save()
                 for bet in bets:
-                    if bet.match_res == match.match_result:
-                        print(match.match_result)
+                    if bet.match_res == match.match_result and bet.match_res == 'TeamA Win':
+                        print(match.match_result,bet.money,rateA, rateB, 'ifres')
                         bet.user.profile.wallet += bet.money * rateA
                         bet.user.profile.save()
-                    elif bet.match_res == match.match_result and match.match_result == 'TeamB Win':
+                    elif bet.match_res == match.match_result and bet.match_res == 'TeamB Win':
+                        print(match.match_result, bet.money, rateA, rateB, 'elifres')
                         bet.user.profile.wallet += bet.money * rateB
                         bet.user.profile.save()
-                else:
-                    return redirect('match-page')
+
+
         return render(request, 'CyberUser/update_match_page.html', {'form':form})
     except Match.DoesNotExist:
         return HttpResponse('Page Not Found!')
+
+
+def all_bets_page(request, user_id):
+    user = User.objects.get(id=user_id)
+    bets = user.bet_set.all()
+    context = {'user':user, 'bets':bets}
+    return render(request, 'CyberUser/all_bets_page.html', context)
 
 
 

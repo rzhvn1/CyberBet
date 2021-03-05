@@ -29,6 +29,7 @@ class BetForm(forms.ModelForm):
     class Meta:
         model = Bet
         fields = '__all__'
+        exclude = ['rateA', 'rateB',]
 
 class UpdateMatch(forms.ModelForm):
 

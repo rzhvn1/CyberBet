@@ -4,5 +4,14 @@
     <a href="{% url 'signup-page' %}">Register</a>
     <a href="{% url 'login-page' %}">Login</a>
     <a href="{% url 'match-page' %}">Match</a>
+    <a href="{% url 'all-bets-page' user.id %}">My Bets</a>
+    <a href="{% url 'about-us-page' %}">About Us</a>
+    {% if request.user.is_authenticated %}
+        <div >Hello, {{ request.user }}!</div>
+        <a href="{% url 'logout-page'%}">Logout</a>
+    {% else %}
+        <a href="{% url 'signup-page' %}">Register</a>
+        <a href="{% url 'login-page' %}">Log in</a>
+    {% endif %}
 
 </nav>

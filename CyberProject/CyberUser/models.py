@@ -55,6 +55,10 @@ class Comment(models.Model):
     text = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
 
+class AboutUs(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+
 
 #********************CyberBet********************
 
@@ -72,9 +76,14 @@ class Team(models.Model):
 class TeamA(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.team.name
 
 class TeamB(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.team.name
 
 class Match(models.Model):
     tital = models.CharField(max_length=100)
@@ -98,7 +107,7 @@ class Match(models.Model):
 
 
     def __str__(self):
-        return f"{self.teamA} {self.teamB}"
+        return f"{self.teamA.team.name} {self.teamB.team.name}"
 
     class Meta:
         ordering = ['-published_date']
@@ -117,16 +126,9 @@ class Bet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     match_res = models.CharField(choices=win_tie_lose, max_length=50)
-    money = models.PositiveIntegerField(default=0)
+    rateA = models.PositiveIntegerField(default=1)
+    rateB = models.PositiveIntegerField(default=1)
+    money = models.FloatField(default=0)
 
-
-
-
-
-
-
-
-
-
-
-
+    def __str__(self):
+        return f"TeamB: {self.match.teamB.team.name}, TeamA: {self.match.teamA.team.name} {self.match_res}"

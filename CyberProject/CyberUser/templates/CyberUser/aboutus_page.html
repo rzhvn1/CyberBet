@@ -1,0 +1,10 @@
+{% extends 'CyberUser/base.html' %}
+{% block content %}
+
+{% for us in about_us %}
+    <div>
+        <h1>{{ us.title }}</h1>
+        <p>{{ us.description }}</p>
+    </div>
+{% endfor %}
+{% endblock %}

@@ -4,5 +4,5 @@ from .models import *
 
 
 admin.site.register(Profile)
-admin.site.register([News, Like, Dislike, Comment])
+admin.site.register([News, Like, Dislike, Comment, AboutUs])
 admin.site.register([Team, TeamA, TeamB, Match, Bet])
